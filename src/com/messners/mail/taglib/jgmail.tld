@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN" "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib>
+	<tlibversion>1.1</tlibversion>
+	<jspversion>1.1</jspversion>
+	<shortname>email</shortname>
+	<uri>http://www.messners.com/jgmail</uri>
+
+	<tag>
+		<name>email</name>
+		<tagclass>com.messners.mail.taglib.MailTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+
+		<attribute>
+			<name>server</name>
+			<required>no</required>
+			<rtexprvalue>yes</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>subject</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>authType</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>user</name>
+			<required>no</required>
+			<rtexprvalue>yes</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>password</name>
+			<required>no</required>
+			<rtexprvalue>yes</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>from</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>to</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>replyTo</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>cc</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>bcc</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>server</name>
+		<tagclass>com.messners.mail.taglib.ServerTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+	</tag>
+
+	<tag>
+	 	<name>authType</name>
+		<tagclass>com.messners.mail.taglib.AuthTypeTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+	</tag>
+
+	<tag>
+	 	<name>user</name>
+		<tagclass>com.messners.mail.taglib.UserTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+	</tag>
+
+	<tag>
+	 	<name>password</name>
+		<tagclass>com.messners.mail.taglib.PasswordTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+	</tag>
+
+	<tag>
+		<name>auth</name>
+		<tagclass>com.messners.mail.taglib.AuthTag</tagclass>
+		<bodycontent>empty</bodycontent>
+
+		<attribute>
+			<name>authType</name>
+			<required>yes</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>user</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>password</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+	</tag>
+ 
+	<tag>
+		<name>addRecipient</name>
+		<tagclass>com.messners.mail.taglib.AddRecipientTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+
+		<attribute>
+			<name>type</name>
+			<required>yes</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>address</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>body</name>
+		<tagclass>com.messners.mail.taglib.BodyTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+
+		<attribute>
+			<name>type</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>header</name>
+		<tagclass>com.messners.mail.taglib.HeaderTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+
+		<attribute>
+			<name>name</name>
+			<required>yes</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>value</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>replyto</name>
+		<tagclass>com.messners.mail.taglib.ReplyToTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+	</tag>
+
+	<tag>
+		<name>from</name>
+		<tagclass>com.messners.mail.taglib.FromTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+	</tag>
+
+	<tag>
+		<name>subject</name>
+		<tagclass>com.messners.mail.taglib.SubjectTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+	</tag>
+
+	<tag>
+		<name>attachment</name>
+		<tagclass>com.messners.mail.taglib.AttachmentTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+
+		<attribute>
+			<name>file</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>url</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>type</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+	</tag>
+
+ 
+	<tag>
+		<name>send</name>
+		<tagclass>com.messners.mail.taglib.SendTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+
+		<attribute>
+			<name>background</name>
+			<required>no</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>error</name>
+		<tagclass>com.messners.mail.taglib.ErrorTag</tagclass>
+		<teiclass>com.messners.mail.taglib.ErrorTEI</teiclass>
+		<bodycontent>JSP</bodycontent>
+
+		<attribute>
+			<name>id</name>
+			<required>yes</required>
+			<rtexprvalue>no</rtexprvalue>
+		</attribute>
+	</tag>
+
+</taglib>
+

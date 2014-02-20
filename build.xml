@@ -1,0 +1,278 @@
+<!-- ==================================================================== -->
+<!-- ID: $Revision: 1.6 $ $Date: 2003/11/18 04:07:59 $                    -->
+<!-- ==================================================================== -->
+
+<project name="jgmail" default="compile" >
+
+	<description>
+=================================================
+             JgMail Build
+=================================================
+	</description>
+
+
+	<!-- =================== Initialization properties ==================== -->
+
+	<property file="build.properties"/>
+
+	<!-- These are global settings -->
+	<property name="build.dir"            value="build" />
+	<property name="build.classes"        value="${build.dir}/classes" />
+	<property name="build.lib"            value="${build.dir}/lib" />
+	<property name="build.docs"           value="${build.dir}/docs" />
+	<property name="build.samples"        value="${build.dir}/samples" />
+
+	<property name="jgmail.jar" value="${build.lib}/jgmail.jar" />
+	<property name="jgmailtags.jar" value="${build.lib}/jgmailtags.jar" />
+
+
+	<!-- ======================= Prepare for Build ======================== -->
+	<target name="prepare">
+
+		<mkdir dir="${build.classes}" />
+		<mkdir dir="${build.lib}" />
+		<mkdir dir="${build.docs}" />
+		<mkdir dir="${build.samples}" />
+
+	</target>
+
+
+	<!-- ============================== All =============================== -->
+	<target name="all" depends="compile, docs, tests"
+		description="build everything" />
+
+
+	<!-- ============================= Clean ============================== -->
+	<target name="clean" description="delete all generated files">
+
+		<delete dir="${build.dir}/samples" />
+		<delete dir="${build.classes}/com/messners/mail" />
+		<delete dir="${build.docs}" />
+		<delete file="${jgmail.jar}" />
+		<delete file="${jgmailtags.jar}" />
+
+	</target>
+
+
+	<!-- ============================ Compile ============================= -->
+	<target name="compile" depends="debug-on, prepare" 
+			description="compile files and create jgmail.jar">
+
+		<javac
+			deprecation="on"
+			debug="${debug.flag}"
+			optimize="${optimize.flag}"
+			listfiles="true"
+			destdir="${build.classes}"
+			classpath="${build.classes}">
+			
+			<src path="src" />
+			<include name="com/messners/mail/*.java" />
+
+		</javac>
+
+		<!-- Compile the J2ME connector (only done if midpapi.present=true) -->
+		<available file="${midpapi.zip}" property="midpapi.present"/>
+		<antcall target="compile-j2me" />
+
+		<jar
+			basedir="${build.classes}"
+			destfile="${jgmail.jar}"
+			filesonly="true"
+			update="true">
+
+			<!-- Exclude everything and then include only the files we want -->
+			<exclude name="**" />
+
+			<fileset dir="${build.classes}">
+				<exclude name="com/messners/mail/taglib/**" />
+				<include name="com/messners/mail/**" />
+			</fileset>
+
+			<!-- Include all the non-test resources -->
+			<fileset dir="src">
+				<include name="com/messners/mail/**/*.properties" />
+				<include name="com/messners/mail/**/*.map" />
+			</fileset>
+
+		</jar>
+
+		<!-- Compile the JSP tab library (only done if servlet.present=true) -->
+		<available file="${servlet.jar}" property="servlet.present"/>
+		<antcall target="compile-taglib" />
+			
+	</target>
+
+
+	<target name="compile-j2me" if="midpapi.present">
+
+		<javac
+			debug="${debug.flag}"
+			optimize="${optimize.flag}"
+			listfiles="true"
+			destdir="${build.classes}"
+			classpath="${midpapi.zip}">
+
+			<src path="src" />
+			<include name="com/messners/mail/j2me/*.java" />
+		</javac>
+
+	</target>
+
+
+	<target name="compile-taglib" if="servlet.present">
+
+		<javac
+			deprecation="on"
+			debug="${debug.flag}"
+			optimize="${optimize.flag}"
+			listfiles="true"
+			destdir="${build.classes}"
+			classpath="${servlet.jar}">
+
+			<src path="src" />
+			<include name="com/messners/mail/taglib/*.java" />
+		</javac>
+
+		<jar
+			basedir="${build.classes}"
+			destfile="${jgmailtags.jar}"
+			filesonly="true"
+			update="true">
+
+			<!-- Exclude everything and then include only the files we want -->
+			<exclude name="**" />
+
+			<fileset dir="${build.classes}">
+				<include name="com/messners/mail/taglib/**" />
+			</fileset>
+
+		</jar>
+
+	</target>
+
+
+	<!-- ====================== Debug Distribution ======================== -->
+	<target name="debug-dist" depends="debug-on, clean, compile, docs"
+		description="build a release with debug=on" />
+
+
+	<!-- =========================== Debug Off ============================ -->
+	<target name="debug-off">
+
+		<!-- Flags for no-debug compiling, remember properties are immutable
+			  and once set there value cannot be changed, so if this build
+			  file is called from an upper-level build file these settings
+			  will be inherited not overridden. -->
+		<property name="debug.flag"        value="off" />
+		<property name="optimize.flag"     value="on" />
+
+	</target>
+
+
+	<!-- =========================== Debug On ============================= -->
+	<target name="debug-on">
+
+		<!-- Flags for debug compiling, remember properties are immutable
+			  and once set there value cannot be changed, so if this build
+			  file is called from an upper-level build file these settings
+			  will be inherited not overridden. -->
+		<property name="debug.flag"        value="on" />
+		<property name="optimize.flag"     value="off" />
+
+	</target>
+	
+
+	<!-- ============================= Docs =============================== -->
+	<target name="docs"
+		description="build all generated documentation">
+
+		<javadoc 
+			destdir="${build.docs}"
+			author="true"
+			version="true"
+			use="true"
+			public="true"
+			windowtitle="JgMail">
+
+			<classpath>
+                <pathelement path="${build.classes}" />
+				<pathelement location="${midpapi.zip}" />
+				<pathelement location="${servlet.jar}" />
+			</classpath>
+
+			<fileset dir="src" defaultexcludes="yes">
+				<include name="com/messners/mail/*.java" />
+				<include name="com/messners/mail/j2me/*.java" />
+				<include name="com/messners/mail/taglib/*.java" />
+			</fileset>
+
+			<doctitle><![CDATA[<h1>JgMail</h1>]]></doctitle>
+			<bottom><![CDATA[<i></i>]]></bottom>
+		</javadoc>
+
+	</target>
+
+
+	<!-- ============================= Dist =============================== -->
+	<target name="dist" depends="debug-off, clean, compile, docs"
+		description="build a distribution with debug=off, optimize=on">
+
+	</target>
+
+
+	<!-- =========================== Run Test ============================= -->
+	<target name="run-tests" depends="tests"
+		description="build and run the JUnit tests">
+
+	</target>
+
+
+	<!-- ======================== Compile Samples ========================= -->
+	<target name="samples" depends="compile" 
+			description="compile sample files">
+
+		<javac
+			debug="${debug.flag}"
+			optimize="${optimize.flag}"
+			listfiles="true"
+			destdir="${build.samples}"
+			classpath="${build.classes}">
+
+			<src path="src/samples" />
+			<include name="*.java" />
+		</javac>
+
+	</target>
+
+
+	<!-- ============================ Tests =============================== -->
+	<target name="tests" depends="compile"
+		description="build the JUnit tests">
+
+	</target>
+
+
+	<!-- ============================== Help ============================== -->
+	<target name="help" 
+		description="prints a list of top-level targets">
+
+		<echo message=""/>
+		<echo message="ANT build targets for JgMail" />
+		<echo message=""/>
+		<echo message="The following targets are available:" />
+		<echo message="	all         build everything" />
+		<echo message="	clean       delete all generated files" />
+		<echo message="	compile     compile and build JAR" />
+		<echo message="	debug-dist  build a distribution with debug=on, optimize=off" />
+		<echo message="	docs        build all generated documentation" />
+		<echo message="	help        prints this help message" />
+		<echo message="	dist        build a distribution with debug=off, optimize=on" />
+		<echo message="	run-tests   build and run the JUnit tests" />
+		<echo message="	tests       build the JUnit tests" />
+		<echo message="" />
+		<echo message="Project will be built in ${basedir}." />
+
+	</target>
+
+</project>
